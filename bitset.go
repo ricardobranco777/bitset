@@ -4,6 +4,8 @@
 
 package bitset
 
+import "fmt"
+
 type word uint64
 
 const (
@@ -32,6 +34,9 @@ func New(max int) *Bitset {
 }
 
 func (bs *Bitset) Add(i int) {
+	if i < 0 {
+		panic(fmt.Sprintf("Trying to Add a negative number: ", i))
+	}
 	if i >= len(bs.words)*bitsPerWord {
 		var newSet = make([]word, len(bs.words)+i/bitsPerWord+1)
 		copy(newSet, bs.words)
@@ -45,11 +50,17 @@ func (bs *Bitset) Add(i int) {
 }
 
 func (bs *Bitset) Del(i int) {
+	if i < 0 {
+		panic(fmt.Sprintf("Trying to Del a negative number: %d\n", i))
+	}
 	bs.words[i/bitsPerWord] &= ^(1 << uint(i%bitsPerWord))
 	bs.count--
 }
 
 func (bs *Bitset) Test(i int) bool {
+	if i < 0 {
+		panic(fmt.Sprintf("Trying to Test a negative number: %d\n", i))
+	}
 	return (bs.words[i/bitsPerWord] & (1 << uint(i%bitsPerWord))) != 0
 }
 
