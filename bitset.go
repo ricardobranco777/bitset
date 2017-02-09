@@ -35,7 +35,7 @@ func New(max int) *Bitset {
 
 func (bs *Bitset) Add(i int) {
 	if i < 0 {
-		panic(fmt.Sprintf("Trying to Add a negative number: ", i))
+		panic(fmt.Sprintf("Trying to Add a negative number: %d\n", i))
 	}
 	if i >= len(bs.words)*bitsPerWord {
 		var newSet = make([]word, len(bs.words)+i/bitsPerWord+1)
