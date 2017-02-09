@@ -5,6 +5,7 @@
 package bitset
 
 import "fmt"
+import "runtime"
 
 type word uint64
 
@@ -28,6 +29,7 @@ func New(max int) *Bitset {
 			bs.words[i] = 0
 		}
 	}
+	runtime.SetFinalizer(bs, destroy)
 	return bs
 }
 
@@ -99,4 +101,16 @@ func (bs *Bitset) GetAll() (s []int) {
 		}
 	}
 	return
+}
+
+func destroy(bs *Bitset) {
+	for i := range bs.words {
+		delete(bs.words, i)
+	}
+	bs.count = 0
+	bs.max = -1
+}
+
+func (bs *Bitset) Destroy() {
+	destroy(bs)
 }
